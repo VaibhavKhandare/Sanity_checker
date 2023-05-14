@@ -62,7 +62,7 @@ function findDifference(text1, text2) {
   
   var maxLength = Math.max(text1Array.length, text2Array.length);
   Object.entries(mapper).forEach(val=>{
-    if(val[1][1].substring(3)===val[1][0].substring(3))
+    if(val[1][1]?.substring(3)===val[1][0]?.substring(3))
     diff += `<p>${val[0]} - ${val[1][0]} ${val[1][1]} </p>`;
     else 
       if(val[1][1] && val[1][0])
