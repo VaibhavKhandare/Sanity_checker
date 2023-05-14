@@ -47,16 +47,16 @@ function findDifference(text1, text2) {
   const mapper = {};
   text1Array.forEach(i=>{
     if(mapper[i[0]]){
-      mapper[i[0]].push(i[1]);
+      mapper[i[0]].push("1--"+i[1]);
     }else{
-      mapper[i[0]] = [i[1]];
+      mapper[i[0]] = ["1--"+i[1]];
     }
   })
   text2Array.forEach(i=>{
     if(mapper[i[0]]){
-      mapper[i[0]].push(i[1]);
+      mapper[i[0]].push("2--"+i[1]);
     }else{
-      mapper[i[0]] = [i[1]];
+      mapper[i[0]] = ["2--"+i[1]];
     }
   })
   
