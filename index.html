@@ -6,15 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <h1>Text Comparison</h1>
-    <label for="text1">Text 1:</label>
-    <textarea id="text1"></textarea>
-    <br>
-    <label for="text2">Text 2:</label>
-    <textarea id="text2"></textarea>
-    <br>
-    <button onclick="compareText()">Compare Text</button>
-    <br>
+    <h1 style="font-size: 24px; color: blue;">Text Comparison</h1>
+<label for="text1" style="font-weight: bold;">Paste Your Sanity:</label>
+<textarea id="text1" style="display: inline-block; width: 45%; height: 150px; margin-right: 20px;"></textarea>
+<label for="text2" style="font-weight: bold;">Paste Prod Sanity</label>
+<textarea id="text2" style="display: inline-block; width: 45%; height: 150px;"></textarea>
+<br>
+<button onclick="compareText()" style="background-color: green; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">Compare Text</button>
+<br>
     <h2>Differences:</h2>
     <div id="differences"></div>
     
@@ -47,28 +46,25 @@ function findDifference(text1, text2) {
   const mapper = {};
   text1Array.forEach(i=>{
     if(mapper[i[0]]){
-      mapper[i[0]].push("1--"+i[1]);
+      mapper[i[0]].push("Your Failures--"+i[1]);
     }else{
-      mapper[i[0]] = ["1--"+i[1]];
+      mapper[i[0]] = ["Your Failures--"+i[1]];
     }
   })
   text2Array.forEach(i=>{
     if(mapper[i[0]]){
-      mapper[i[0]].push("2--"+i[1]);
+      mapper[i[0]].push("Prod Failures"+i[1]);
     }else{
-      mapper[i[0]] = ["2--"+i[1]];
+      mapper[i[0]] = ["Prod Failures"+i[1]];
     }
   })
   
   var maxLength = Math.max(text1Array.length, text2Array.length);
   Object.entries(mapper).forEach(val=>{
-    if(val[1][1]?.substring(3)===val[1][0]?.substring(3))
-    diff += `<p>${val[0]} - ${val[1][0]} ${val[1][1]} </p>`;
-    else 
       if(val[1][1] && val[1][0])
-      diff += `<p>${val[0]} - <b><span style="color:red"> ${val[1][0]} ${val[1][1]}</span></b> </p>`;
-      else
-      diff += `<p>${val[0]} - <b style="color:green"> ${val[1][0]} ${val[1][1]}</b> </p>`;
+      diff += `<p>${val[0]} - <b><span style="color:orange"> ${val[1][0]} ${val[1][1]}</span></b> </p>`;
+      else if(val[1][1])
+      diff += `<p>${val[0]} - <b style="color:red"> ${val[1][0]} ${val[1][1]}</b> </p>`;
   })
   
   return diff;
