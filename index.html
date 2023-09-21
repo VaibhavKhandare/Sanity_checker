@@ -110,18 +110,18 @@
             const mapper = {};
             text1Array.forEach(i => {
                 if (mapper[i[0]]) {
-                    mapper[i[0]].push(i.at(1) ? .split(" ").at(2));
+                    mapper[i[0]].push(i.at(1)?.split(" ").at(2));
                 } else {
                     mapper[i[0]] = [
-                        i.at(1) ? .split(" ").at(2)
+                        i.at(1)?.split(" ").at(2)
                     ];
                 }
             })
             text2Array.forEach(i => {
                 if (mapper[i[0]]) {
-                    mapper[i[0]].push(i.at(1) ? .split(" ").at(2));
+                    mapper[i[0]].push(i.at(1)?.split(" ").at(2));
                 } else {
-                    mapper[i[0]] = [i.at(1) ? .split(" ").at(2)];
+                    mapper[i[0]] = [i.at(1)?.split(" ").at(2)];
                 }
             })
             let collectionFailed = ""
@@ -129,7 +129,7 @@
             diff += "<table><tr><th>Collection</th><th>Your Collections Failures</th><th>Prod Collections Failures</th></tr>"
             Object.entries(mapper).forEach(val => {
                 diff += "<tr>"
-                const filename = val[0].match(/\/([^\/]+)\.json$/) ? .at(1) || ""
+                const filename = val[0].match(/\/([^\/]+)\.json$/)?.at(1) || ""
                 console.log('filename,', filename, val[0])
                 if (val[1][1] && val[1][0] && (val[1][1] !== val[1][0])) {
                     diff += `<td>${filename}</td> <td style="color:orange; font-weight:800"> ${val[1][0]} </td> <td style="color:orange; font-weight:800"> ${val[1][1]}</td>`;
