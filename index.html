@@ -109,33 +109,33 @@
 
             const mapper = {};
             text1Array.forEach(i => {
+                const vall =  i.at(1)?.split(" ").at(2);
                 if (mapper[i[0]]) {
-                    mapper[i[0]].push(i.at(1)?.split(" ").at(2));
+                    mapper[i[0]].your = vall;
                 } else {
-                    mapper[i[0]] = [
-                        i.at(1)?.split(" ").at(2)
-                    ];
+                    mapper[i[0]] = {"your":vall}
                 }
             })
             text2Array.forEach(i => {
+                const vall =  i.at(1)?.split(" ").at(2);
                 if (mapper[i[0]]) {
-                    mapper[i[0]].push(i.at(1)?.split(" ").at(2));
+                    mapper[i[0]].prod = vall;
                 } else {
-                    mapper[i[0]] = [i.at(1)?.split(" ").at(2)];
+                    mapper[i[0]] = {"prod":vall}
                 }
             })
             let collectionFailed = ""
             var maxLength = Math.max(text1Array.length, text2Array.length);
             diff += "<table><tr><th>Collection</th><th>Your Collections Failures</th><th>Prod Collections Failures</th></tr>"
             Object.entries(mapper).forEach(val => {
+                console.log('val', val)
                 diff += "<tr>"
                 const filename = val[0].match(/\/([^\/]+)\.json$/)?.at(1) || ""
-                console.log('filename,', filename, val[0])
-                if (val[1][1] && val[1][0] && (val[1][1] !== val[1][0])) {
-                    diff += `<td>${filename}</td> <td style="color:orange; font-weight:800"> ${val[1][0]} </td> <td style="color:orange; font-weight:800"> ${val[1][1]}</td>`;
+                if (val[1]?.prod && val[1]?.your && (val[1].prod !== val[1].your)) {
+                    diff += `<td>${filename}</td> <td style="color:orange; font-weight:800"> ${val[1].your} </td> <td style="color:orange; font-weight:800"> ${val[1].prod}</td>`;
                     collectionFailed += filename + ','
-                } else if (val[1][0] && !val[1][1]) {
-                    diff += `<td>${filename}</td><td style="color:red; font-weight:800"> ${val[1][0]} </td><td> No  </td></tr>`;
+                } else if (val[1]?.prod && val[1].your) {
+                    diff += `<td>${filename}</td><td style="color:red; font-weight:800"> ${val[1].your} </td><td> No  </td></tr>`;
                     collectionFailed += filename + ','
                 }
                 diff += "</tr>"
