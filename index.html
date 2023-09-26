@@ -124,17 +124,18 @@
                     mapper[i[0]] = {"prod":vall}
                 }
             })
+            console.log('mapper', mapper)
             let collectionFailed = ""
             var maxLength = Math.max(text1Array.length, text2Array.length);
             diff += "<table><tr><th>Collection</th><th>Your Collections Failures</th><th>Prod Collections Failures</th></tr>"
             Object.entries(mapper).forEach(val => {
-                console.log('val', val)
                 diff += "<tr>"
                 const filename = val[0].match(/\/([^\/]+)\.json$/)?.at(1) || ""
                 if (val[1]?.prod && val[1]?.your && (val[1].prod !== val[1].your)) {
                     diff += `<td>${filename}</td> <td style="color:orange; font-weight:800"> ${val[1].your} </td> <td style="color:orange; font-weight:800"> ${val[1].prod}</td>`;
                     collectionFailed += filename + ','
-                } else if (val[1]?.prod && val[1].your) {
+                } else if (!val[1].prod && val[1].your) {
+                    console.log('val,', val,val[1]?.prod, val[1].your)
                     diff += `<td>${filename}</td><td style="color:red; font-weight:800"> ${val[1].your} </td><td> No  </td></tr>`;
                     collectionFailed += filename + ','
                 }
