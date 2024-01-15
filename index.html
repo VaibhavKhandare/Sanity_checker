@@ -41,11 +41,8 @@
     0% {
         color: #ff0000; /* Red */
     }
-    16.67% {
+    25% {
         color: #ff7f00; /* Orange */
-    }
-    33.33% {
-        color: #ffff00; /* Yellow */
     }
     50% {
         color: #00ff00; /* Green */
@@ -96,9 +93,12 @@
     <br>
     <h2>Differences:</h2>
     <div id="differences"></div>
-
+    <button onclick="copyFailCollection()"
+        style="background-color: rgb(80, 164, 197); color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">Copy Failed Collection</button>
+    <br/>
     <script>
         var datam = {};
+        var failed = "";
         function compareText() {
             var text1 = document.getElementById("text1").value;
             var text2 = document.getElementById("text2").value;
@@ -152,6 +152,16 @@
                 });
         }
 
+        function copyFailCollection(){
+            navigator.clipboard.writeText(failed)
+                .then(() => {
+                    alert("Copied failed Collection List");
+                })
+                .catch(error => {
+                    console.error('Error copying to clipboard:', error);
+                });
+        }
+
 
         function findDifference(text1, text2) {
             var diff = "";
@@ -196,7 +206,8 @@
                 diff += "</tr>"
             })
             diff += "</table>"
-            diff += `<h2>Failing Collections</h2><p>${collectionFailed.substring(0, collectionFailed.length - 1)}</p>`
+            failed =collectionFailed.substring(0, collectionFailed.length - 1);
+            diff += `<h2>Failing Collections</h2><p>${failed}</p>`
             return diff;
         }
         compareText()
