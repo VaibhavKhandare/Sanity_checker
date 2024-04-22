@@ -48,19 +48,28 @@
 }
 
 @keyframes rainbow {
-    50% {
+    0% {
         color: #0000ff; /* Blue */
     }
-    0% {
-        color: #4b0082; /* Indigo */
-    }
     100% {
-        color: #9400d3; /* Violet */
+        color: #4b0082; /* Indigo */
     }
 }
 .hidden {
     display: none;
   }
+  textarea {
+        width: 99%;
+        min-height: 150px;
+        margin-bottom: 10px;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: green;;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
     </style>
 </head>
 
@@ -110,6 +119,29 @@
     <button onclick="copyFailCollection()"
         style="background-color: rgb(80, 164, 197); color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">Copy Failed Collection</button>
     <br/>
+    <hr/>
+<hr/>
+
+<h1 style="font-size: 24px; color: #000060;">Miscellaneous Converters</h1>
+
+<div>
+    <textarea id="jsonInput" placeholder="Enter JSON, string, or SQL queries..."></textarea>
+    <textarea placeholder="Draw Board"></textarea>
+
+</div>
+
+<div>
+    <button onclick="convertToJson()">Convert to JSON</button>
+    <button onclick="convertToString()">Convert to String</button>
+    <button onclick="convertToJSONMap()">Convert SQL to JSON Map</button>
+    <button onclick="convertJSONMapToSQL()">Convert JSON Map to SQL</button>
+</div>
+<br/>
+<div>
+    <textarea id="output" readonly></textarea>
+</div>
+
+<button onclick="copyOutput()" style="background-color: rgb(80, 164, 197);">Copy Output</button>
     <script>
         var datam = {};
         var failed = "";
@@ -135,6 +167,63 @@
     bgimg.classList.add('hidden');
   }
 }
+
+
+function convertToJson() {
+    try {
+        const input = document.getElementById('jsonInput').value.trim();
+        const json = JSON.parse(input);
+        document.getElementById('output').value = JSON.stringify(json, null, 2);
+    } catch (error) {
+        document.getElementById('output').value = 'Invalid JSON format.';
+    }
+}
+
+function convertToString() {
+    try {
+        const input = document.getElementById('jsonInput').value.trim();
+        const str = JSON.stringify(input);
+        document.getElementById('output').value = str;
+    } catch (error) {
+        document.getElementById('output').value = 'Error converting to string.';
+    }
+}
+
+function convertToJSONMap() {
+    try {
+        const input = document.getElementById('jsonInput').value.trim();
+        const queries = input.split('\n').map((query, index) => {
+            return `\t"${index + 1}": "${escapeDoubleQuotes(query.trim())}"`;
+        });
+        const jsonMap = `{\n${queries.join(', \n')}\n}`;
+        document.getElementById('output').value = jsonMap;
+    } catch (error) {
+        document.getElementById('output').value = 'Error converting SQL queries to JSON Map.';
+    }
+}
+
+function convertJSONMapToSQL(jsonMap) {
+    try {
+        const jsonMap = document.getElementById('jsonInput').value.trim();
+        const map = JSON.parse(jsonMap);
+        const queries = Object.values(map);
+        document.getElementById('output').value = queries.join('\n');
+    } catch (error) {
+        document.getElementById('output').value = error + 'Error converting SQL queries to JSON Map.';
+    }
+}
+
+function escapeDoubleQuotes(str) {
+    return str.replace(/"/g, '\\"');
+}
+
+function copyOutput() {
+    const outputTextArea = document.getElementById('output');
+    outputTextArea.select();
+    document.execCommand('copy');
+}
+
+
 function applyBackground() {
   var bgUrl = document.getElementById('bgUrlInput').value;
   var contentDiv = document.getElementById('bg');
