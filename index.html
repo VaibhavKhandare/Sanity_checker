@@ -40,7 +40,13 @@
 .visited-count span, .compared-count span {
     margin-right: 5px;
 }
-
+.fullsize{
+	width: 100%;
+	height: 100vh;
+	border: none;
+	margin: none;
+	padding: none;
+}
 #visitedCount , #comparedCount  {
     color: black;
 }
@@ -138,6 +144,11 @@
 </div>
 
 <button onclick="copyOutput()" style="background-color: rgb(80, 164, 197);">Copy Output</button>
+<hr/>
+<hr/>
+<h1 style="font-size: 24px; color: #000060;">TestCases</h1>
+<iframe src="https://vaibhavkhandare.github.io/json-pm-testcase-writer/" class="fullsize"></iframe>
+
     <script>
         var datam = {};
         var failed = "";
