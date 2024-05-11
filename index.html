@@ -298,8 +298,8 @@
                     $(this).parentsUntil('.json-tree', 'ul').show();
                     $(this).parentsUntil('.json-tree', 'li').children('button').removeClass('collapsed');
                 } else {
-
-                    if($(this).find("span")?.data("path")?.includes(searchText) || $(this).find("button").data("inputid")?.includes(searchText)){
+                    console.log('$(this).find("span")?.data("path")?.includes(searchText)', $(this).find("span")?.data("path"))
+                    if($(this).find("span")?.data("path")?.toLowerCase().includes(searchText?.toLowerCase()) || $(this).find("button").data("inputid")?.toLowerCase()?.includes(searchText?.toLowerCase())){
                         $(this).show();
                     }else{
                         $(this).hide();
