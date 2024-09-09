@@ -317,7 +317,7 @@ function applyBackground() {
             Object.entries(mapper).forEach(val => {
                 diff += "<tr>"
                 const filename = val[0].match(/\/([^\/]+)\.json$/)?.at(1) || ""
-                if (val[1]?.prod && val[1]?.your && (val[1].prod !== val[1].your)) {
+                if (val[1]?.prod && val[1]?.your && (val[1].prod - 0 < val[1].your - 0)) {
                     diff += `<td><button onclick="copyCollectionName('${filename}')" style="background-color: white; font-size:16px">${filename}</button></td> <td style="color:orange; font-weight:800"> ${val[1].your} </td> <td style="color:orange; font-weight:800"> ${val[1].prod}</td><td><input style="border:none" type="text" size="21"></input></td>`;
                     collectionFailed += filename + ','
                 } else if (!val[1].prod && val[1].your) {
