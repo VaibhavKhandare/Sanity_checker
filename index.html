@@ -20,78 +20,92 @@
             background-color: white;
         }
 
-.visited-count, .compared-count {
-    margin: 10px;
-    padding: 15px;
-    font-size: 18px;
-    font-weight: bold;
-    animation: rainbow 15s infinite;
-}
+        .visited-count,
+        .compared-count {
+            margin: 10px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            animation: rainbow 15s infinite;
+        }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
 
-.visited-count span, .compared-count span {
-    margin-right: 5px;
-}
-.fullsize{
-	width: 100%;
-	height: 100vh;
-	border: none;
-	margin: none;
-	padding: none;
-}
-#visitedCount , #comparedCount  {
-    color: black;
-}
+            to {
+                opacity: 1;
+            }
+        }
 
-@keyframes rainbow {
-    0% {
-        color: #0000ff; /* Blue */
-    }
-    100% {
-        color: #4b0082; /* Indigo */
-    }
-}
-.hidden {
-    display: none;
-  }
-  textarea {
-        width: 99%;
-        min-height: 150px;
-        margin-bottom: 10px;
-    }
-    button {
-        padding: 3px 8px;
-        background-color: green;
-        cursor: pointer;
-    }
+        .visited-count span,
+        .compared-count span {
+            margin-right: 5px;
+        }
+
+        .fullsize {
+            width: 100%;
+            height: 100vh;
+            border: none;
+            margin: none;
+            padding: none;
+        }
+
+        #visitedCount,
+        #comparedCount {
+            color: black;
+        }
+
+        @keyframes rainbow {
+            0% {
+                color: #0000ff;
+                /* Blue */
+            }
+
+            100% {
+                color: #4b0082;
+                /* Indigo */
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        textarea {
+            width: 99%;
+            min-height: 150px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 3px 8px;
+            background-color: green;
+            cursor: pointer;
+        }
     </style>
 </head>
 
 <body>
     <h1 style="font-size: 24px; color: #000060;">Sanity Comparison</h1>
     <div class="counter-container">
+
         <span class="visited-count">
-             Visited&nbsp;<span id="visitedCount"> Loading... </span>
+            Visited&nbsp;<span id="visitedCount"> Loading... </span>
         </span>
         <span class="compared-count">
-            Compared&nbsp;<span id="comparedCount"> Loading... </span> 
+            Compared&nbsp;<span id="comparedCount"> Loading... </span>
         </span>
         <label for="addBackgroundInput">Add Background:</label>
-<input type="checkbox" id="addBackgroundInput" onclick="toggleBackgroundInputs()">
-<span id="backgroundInputs" class="hidden">
-    <input type="text" id="bgUrlInput" placeholder="Background image URL">
-    <button onclick="applyBackground()">Apply</button>
-</span>
+        <input type="checkbox" id="addBackgroundInput" onclick="toggleBackgroundInputs()">
+        <span id="backgroundInputs" class="hidden">
+            <input type="text" id="bgUrlInput" placeholder="Background image URL">
+            <button onclick="applyBackground()">Apply</button>
+        </span>
+
     </div>
-    <br/>
+    <br />
     <div style="display: inline-block;">
         <label for="text1" style="font-weight: bold;">Paste Your Sanity:</label>
         <br />
@@ -106,8 +120,11 @@
     <br>
     <button onclick="compareText()"
         style="background-color: green; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">Compare
-        Collections</button>
+        Collections    </button>
+    <span><strong>Last Compared: </strong><span id="timestamp"></span></span>
     <br>
+
+
     <button onclick="generateShareURL()"
         style="background-color: blue; color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">Share
         Collection Result</button>
@@ -116,45 +133,51 @@
     <div style="display: flex; justify-content: space-between;">
         <div style="flex: 1;" id="differences"></div>
         <div style="flex: 1; background-image: url('https://wallpapers.com/images/high/white-anime-txr0xudlgu1w295m.webp'); background-size: cover;
-        background-position: center; animation: fadeIn 30s ease-in-out; margin-inline: 20px;" id="bg" class="hidden"></div>
-      </div>
+        background-position: center; animation: fadeIn 30s ease-in-out; margin-inline: 20px;" id="bg" class="hidden">
+        </div>
+    </div>
     <button onclick="copyFailCollection()"
-        style="background-color: rgb(80, 164, 197); color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">Copy Failed Collection</button>
-    <br/>
-    <hr/>
-<hr/>
+        style="background-color: rgb(80, 164, 197); color: white; padding: 10px; border: none; cursor: pointer; margin-top: 10px;">Copy
+        Failed Collection</button>
+    <br />
+    <hr />
+    <hr />
 
-<h1 style="font-size: 24px; color: #000060;">Miscellaneous Converters</h1>
+    <h1 style="font-size: 24px; color: #000060;">Miscellaneous Converters</h1>
 
-<div>
-    <textarea id="jsonInput" placeholder="Enter JSON, string, or SQL queries..."></textarea>
-    <textarea placeholder="Draw Board"></textarea>
+    <div>
+        <textarea id="jsonInput" placeholder="Enter JSON, string, or SQL queries..."></textarea>
+        <textarea placeholder="Draw Board"></textarea>
 
-</div>
+    </div>
 
-<div>
-    <button onclick="convertToJson()">Convert to JSON</button>
-    <button onclick="convertToString()">Convert to String</button>
-    <button onclick="convertToJSONMap()">Convert SQL to JSON Map</button>
-    <button onclick="convertJSONMapToSQL()">Convert JSON Map to SQL</button>
-</div>
-<br/>
-<div>
-    <textarea id="output" readonly></textarea>
-</div>
+    <div>
+        <button onclick="convertToJson()">Convert to JSON</button>
+        <button onclick="convertToString()">Convert to String</button>
+        <button onclick="convertToJSONMap()">Convert SQL to JSON Map</button>
+        <button onclick="convertJSONMapToSQL()">Convert JSON Map to SQL</button>
+    </div>
+    <br />
+    <div>
+        <textarea id="output" readonly></textarea>
+    </div>
 
-<button onclick="copyOutput()" style="background-color: rgb(80, 164, 197);">Copy Output</button>
-<hr/>
-<hr/>
-<h1 style="font-size: 24px; color: #000060;">TestCases</h1>
-<iframe src="https://vaibhavkhandare.github.io/json-pm-testcase-writer/" class="fullsize"></iframe>
+    <button onclick="copyOutput()" style="background-color: rgb(80, 164, 197);">Copy Output</button>
+    <hr />
+    <hr />
+    <h1 style="font-size: 24px; color: #000060;">TestCases</h1>
+    <iframe src="https://vaibhavkhandare.github.io/json-pm-testcase-writer/" class="fullsize"></iframe>
 
     <script>
         var datam = {};
         var failed = "";
         function compareText() {
+            console.log('jere')
             var text1 = document.getElementById("text1").value;
             var text2 = document.getElementById("text2").value;
+
+            console.log('text1', text1)
+
 
             var diff = findDifference(text1, text2);
 
@@ -163,81 +186,79 @@
         }
 
         function toggleBackgroundInputs() {
-  var backgroundInputs = document.getElementById('backgroundInputs');
-  var addBackgroundInput = document.getElementById('addBackgroundInput');
-  var bgimg = document.getElementById('bg');
-  if (addBackgroundInput.checked) {
-    backgroundInputs.classList.remove('hidden');
-    bgimg.classList.remove('hidden');
-  } else {
-    backgroundInputs.classList.add('hidden');
-    bgimg.classList.add('hidden');
-  }
-}
+            var backgroundInputs = document.getElementById('backgroundInputs');
+            var addBackgroundInput = document.getElementById('addBackgroundInput');
+            var bgimg = document.getElementById('bg');
+            if (addBackgroundInput.checked) {
+                backgroundInputs.classList.remove('hidden');
+                bgimg.classList.remove('hidden');
+            } else {
+                backgroundInputs.classList.add('hidden');
+                bgimg.classList.add('hidden');
+            }
+        }
 
+        function convertToJson() {
+            try {
+                const input = document.getElementById('jsonInput').value.trim();
+                const json = JSON.parse(input);
+                document.getElementById('output').value = json
+            } catch (error) {
+                document.getElementById('output').value = 'Invalid JSON format.';
+            }
+        }
 
-function convertToJson() {
-    try {
-        const input = document.getElementById('jsonInput').value.trim();
-        const json = JSON.parse(input);
-        document.getElementById('output').value = json
-    } catch (error) {
-        document.getElementById('output').value = 'Invalid JSON format.';
-    }
-}
+        function convertToString() {
+            try {
+                const input = document.getElementById('jsonInput').value.trim();
+                const str = JSON.stringify(input);
+                document.getElementById('output').value = str;
+            } catch (error) {
+                document.getElementById('output').value = 'Error converting to string.';
+            }
+        }
 
-function convertToString() {
-    try {
-        const input = document.getElementById('jsonInput').value.trim();
-        const str = JSON.stringify(input);
-        document.getElementById('output').value = str;
-    } catch (error) {
-        document.getElementById('output').value = 'Error converting to string.';
-    }
-}
+        function convertToJSONMap() {
+            try {
+                const input = document.getElementById('jsonInput').value.trim();
+                const queries = input.split('\n').map((query, index) => {
+                    return `\t"${index + 1}": "${escapeDoubleQuotes(query.trim())}"`;
+                });
+                const jsonMap = `{\n${queries.join(', \n')}\n}`;
+                document.getElementById('output').value = jsonMap;
+            } catch (error) {
+                document.getElementById('output').value = 'Error converting SQL queries to JSON Map.';
+            }
+        }
 
-function convertToJSONMap() {
-    try {
-        const input = document.getElementById('jsonInput').value.trim();
-        const queries = input.split('\n').map((query, index) => {
-            return `\t"${index + 1}": "${escapeDoubleQuotes(query.trim())}"`;
-        });
-        const jsonMap = `{\n${queries.join(', \n')}\n}`;
-        document.getElementById('output').value = jsonMap;
-    } catch (error) {
-        document.getElementById('output').value = 'Error converting SQL queries to JSON Map.';
-    }
-}
+        function convertJSONMapToSQL(jsonMap) {
+            try {
+                const jsonMap = document.getElementById('jsonInput').value.trim();
+                const map = JSON.parse(jsonMap);
+                const queries = Object.values(map);
+                document.getElementById('output').value = queries.join('\n');
+            } catch (error) {
+                document.getElementById('output').value = error + 'Error converting SQL queries to JSON Map.';
+            }
+        }
 
-function convertJSONMapToSQL(jsonMap) {
-    try {
-        const jsonMap = document.getElementById('jsonInput').value.trim();
-        const map = JSON.parse(jsonMap);
-        const queries = Object.values(map);
-        document.getElementById('output').value = queries.join('\n');
-    } catch (error) {
-        document.getElementById('output').value = error + 'Error converting SQL queries to JSON Map.';
-    }
-}
+        function escapeDoubleQuotes(str) {
+            return str.replace(/"/g, '\\"');
+        }
 
-function escapeDoubleQuotes(str) {
-    return str.replace(/"/g, '\\"');
-}
+        function copyOutput() {
+            const outputTextArea = document.getElementById('output');
+            outputTextArea.select();
+            document.execCommand('copy');
+        }
 
-function copyOutput() {
-    const outputTextArea = document.getElementById('output');
-    outputTextArea.select();
-    document.execCommand('copy');
-}
-
-
-function applyBackground() {
-  var bgUrl = document.getElementById('bgUrlInput').value;
-  var contentDiv = document.getElementById('bg');
-  if (bgUrl !== '') {
-    contentDiv.style.backgroundImage = "url('" + bgUrl + "')";
-  } 
-}
+        function applyBackground() {
+            var bgUrl = document.getElementById('bgUrlInput').value;
+            var contentDiv = document.getElementById('bg');
+            if (bgUrl !== '') {
+                contentDiv.style.backgroundImage = "url('" + bgUrl + "')";
+            }
+        }
 
         function customSort(a, b) {
             if (a[0] < b[0]) {
@@ -253,18 +274,24 @@ function applyBackground() {
             const urlParams = new URLSearchParams(window.location.search);
             const text1Param = urlParams.get('text1');
             const text2Param = urlParams.get('text2');
-
-            if (text1Param) {
-                document.getElementById('text1').value = decodeURIComponent(text1Param);
+            const prevData = JSON.parse(localStorage.getItem('prevdata') || "{}")
+            console.log('prevDaata', prevData)
+            if (text1Param)
+                    document.getElementById('text1').value = decodeURIComponent(text1Param) || prevData.text1;
+            else if (prevData.text1) {
+                document.getElementById('timestamp').innerText = prevData.currentStamp;
+                document.getElementById('text1').value = prevData.text1;
             }
 
             if (text2Param) {
-                document.getElementById('text2').value = decodeURIComponent(text2Param);
+                document.getElementById('text2').value = decodeURIComponent(text2Param) || prevData.text2;
+            } else if (prevData.text2) {
+                document.getElementById('text2').value = prevData.text2;
             }
+
         }
 
         populateTextFromQueryParams();
-
 
         function generateShareURL() {
             const text1Value = encodeURIComponent(document.getElementById('text1').value);
@@ -280,10 +307,9 @@ function applyBackground() {
             navigator.clipboard.writeText(text)
         }
 
-        function copyFailCollection(){
+        function copyFailCollection() {
             navigator.clipboard.writeText(failed)
         }
-
 
         function findDifference(text1, text2) {
             var diff = "";
@@ -310,7 +336,10 @@ function applyBackground() {
                     mapper[i[0]] = { "prod": vall }
                 }
             })
-            console.log('mapper', mapper)
+            if (Object.keys(mapper).length > 1) {
+                const currentStamp = new Date().toLocaleString();
+                localStorage.setItem("prevdata", JSON.stringify({ text1, text2, currentStamp }))
+            }
             let collectionFailed = ""
             var maxLength = Math.max(text1Array.length, text2Array.length);
             diff += "<table><tr><th>Collection</th><th>Your Collections Failures</th><th>Prod Collections Failures</th><th>Note</th></tr>"
@@ -321,67 +350,67 @@ function applyBackground() {
                     diff += `<td><button onclick="copyCollectionName('${filename}')" style="background-color: white; font-size:16px">${filename}</button></td> <td style="color:orange; font-weight:800"> ${val[1].your} </td> <td style="color:orange; font-weight:800"> ${val[1].prod}</td><td><input style="border:none" type="text" size="21"></input></td>`;
                     collectionFailed += filename + ','
                 } else if (!val[1].prod && val[1].your) {
-                    console.log('val,', val, val[1]?.prod, val[1].your)
                     diff += `<td><button onclick="copyCollectionName('${filename}')" style="background-color: white; font-size:16px">${filename}</button></td><td style="color:red; font-weight:800"> ${val[1].your} </td><td> No  </td><td><input size="50" style="border:none" type="text"></input></td></tr>`;
                     collectionFailed += filename + ','
                 }
                 diff += "</tr>"
             })
             diff += "</table>"
-            failed =collectionFailed.substring(0, collectionFailed.length - 1);
+            failed = collectionFailed.substring(0, collectionFailed.length - 1);
             // diff += `<h2>Failing Collections</h2><p>${failed}</p>`
             return diff;
         }
         compareText()
         function updateCounts(data) {
-    document.getElementById('visitedCount').textContent = datam.price;
-    document.getElementById('comparedCount').textContent = datam.items;
-    updateVisited()
+            document.getElementById('visitedCount').textContent = datam.price;
+            document.getElementById('comparedCount').textContent = datam.items;
+            updateVisited()
 
-}
-function updateCompare(){
-    console.log('here', datam)
-    if(datam.items!=null){
-        
-    datam.items = datam.items - -1;
-    var requestOptions = {
-  method: 'POST',
-  body: JSON.stringify(datam),
-  headers: {
-    'Content-Type': 'application/json'
-  },
-};
-fetch("https://ecommerce-q1md.onrender.com/data/product/edit", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));}
-}
+        }
+        function updateCompare() {
+            console.log('here', datam)
+            if (datam.items != null) {
+
+                datam.items = datam.items - -1;
+                var requestOptions = {
+                    method: 'POST',
+                    body: JSON.stringify(datam),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                };
+                fetch("https://ecommerce-q1md.onrender.com/data/product/edit", requestOptions)
+                    .then(response => response.text())
+                    .then(result => console.log(result))
+                    .catch(error => console.log('error', error));
+            }
+        }
 
 
-function fetchCountsFromAPI() {
-    fetch('https://ecommerce-q1md.onrender.com/product/65940e16effd65bc957be182')
-        .then(response => response.json())
-        .then(data => {
-            datam = data
-            updateCounts();
-        })
-        .catch(error => console.error('Error fetching counts:', error));
-}
-fetchCountsFromAPI()
-function updateVisited(){
-    datam.price = datam.price - -1;
-    var requestOptions = {
-  method: 'POST',
-  body: JSON.stringify(datam),
-  headers: {
-    'Content-Type': 'application/json'
-  },
-};
-fetch("https://ecommerce-q1md.onrender.com/data/product/edit", requestOptions)
-  .then(response => response.text())
-  .then(result => console.log(result))
-  .catch(error => console.log('error', error));
-}
+        function fetchCountsFromAPI() {
+            fetch('https://ecommerce-q1md.onrender.com/product/65940e16effd65bc957be182')
+                .then(response => response.json())
+                .then(data => {
+                    datam = data
+                    updateCounts();
+                })
+                .catch(error => console.error('Error fetching counts:', error));
+        }
+        fetchCountsFromAPI()
+        function updateVisited() {
+            datam.price = datam.price - -1;
+            var requestOptions = {
+                method: 'POST',
+                body: JSON.stringify(datam),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            };
+            fetch("https://ecommerce-q1md.onrender.com/data/product/edit", requestOptions)
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.log('error', error));
+        }
 
     </script>
 </body>
