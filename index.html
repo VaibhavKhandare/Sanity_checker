@@ -461,7 +461,7 @@
             }
         }
 
-        /* Add these new styles before the @media query */
+        /* Update the converter container styles */
         .converter-container {
             display: flex;
             flex-direction: column;
@@ -470,6 +470,7 @@
         
         .converter-input, .converter-output {
             width: 100%;
+            flex: 1;
         }
         
         .converter-buttons {
@@ -486,6 +487,8 @@
             padding: 1rem;
             min-width: 250px;
             flex: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .button-group-title {
@@ -500,11 +503,119 @@
             font-size: 0.85rem;
         }
         
+        .button-group .button {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            justify-content: center;
+        }
+        
+        .button-group .button:last-child {
+            margin-bottom: 0;
+        }
+        
         .input-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 0.5rem;
+        }
+        
+        #jsonInput, #output {
+            width: 100%;
+            min-height: 300px; /* Set a fixed minimum height for both text areas */
+            resize: vertical;
+        }
+        
+        @media (min-width: 768px) {
+            .converter-container {
+                flex-direction: row;
+                align-items: stretch;
+                min-height: 500px; /* Use min-height instead of fixed height */
+            }
+            
+            .converter-input, .converter-output {
+                width: 40%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .converter-buttons {
+                width: 20%;
+                flex-direction: column;
+                margin: 0;
+                overflow-y: auto;
+            }
+            
+            .button-group {
+                width: 100%;
+            }
+            
+            .converter-input textarea, .converter-output textarea {
+                flex-grow: 1;
+                height: 100%; /* Both text areas fill their container height */
+            }
+        }
+        
+        /* Generic Text Comparison Styles */
+        .comparison-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1rem 0;
+            align-items: center;
+        }
+        
+        .option-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .compare-select {
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            padding: 8px;
+            transition: var(--transition);
+        }
+        
+        .comparison-results {
+            margin-top: 1rem;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        
+        .diff-line {
+            padding: 3px 0;
+            display: flex;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        
+        .diff-line-number {
+            color: var(--text-muted);
+            margin-right: 1rem;
+            user-select: none;
+            text-align: right;
+            width: 3rem;
+        }
+        
+        .diff-removed {
+            background-color: rgba(255, 99, 71, 0.2);
+            color: var(--danger);
+        }
+        
+        .diff-added {
+            background-color: rgba(50, 205, 50, 0.2);
+            color: var(--secondary);
+        }
+        
+        .diff-unchanged {
+            color: var(--text-color);
         }
         
         .notification {
@@ -538,27 +649,6 @@
             opacity: 0;
             transform: translateY(30px);
             pointer-events: none;
-        }
-        
-        @media (min-width: 768px) {
-            .converter-container {
-                flex-direction: row;
-                align-items: stretch;
-            }
-            
-            .converter-input, .converter-output {
-                width: 40%;
-            }
-            
-            .converter-buttons {
-                width: 20%;
-                flex-direction: column;
-                margin: 0;
-            }
-            
-            .button-group {
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -678,6 +768,55 @@
         </div>
         
         <div id="notification" class="notification hidden"></div>
+    </div>
+    
+    <div class="section">
+        <h1>Generic Text Comparison</h1>
+        
+        <div class="text-area-container">
+            <div class="text-area-wrapper">
+                <label for="genericText1" class="textarea-label">Text 1</label>
+                <textarea id="genericText1" placeholder="Paste your first text here..."></textarea>
+            </div>
+
+            <div class="text-area-wrapper">
+                <label for="genericText2" class="textarea-label">Text 2</label>
+                <textarea id="genericText2" placeholder="Paste your second text here..."></textarea>
+            </div>
+        </div>
+        
+        <div class="comparison-options">
+            <div class="option-group">
+                <span class="switch-label">Compare Mode:</span>
+                <select id="compareMode" class="compare-select">
+                    <option value="character">Character by Character</option>
+                    <option value="word">Word by Word</option>
+                    <option value="line" selected>Line by Line</option>
+                </select>
+            </div>
+            
+            <div class="option-group">
+                <span class="switch-label">Ignore Case:</span>
+                <label class="switch">
+                    <input type="checkbox" id="ignoreCase">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="option-group">
+                <span class="switch-label">Ignore Whitespace:</span>
+                <label class="switch">
+                    <input type="checkbox" id="ignoreWhitespace">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <button onclick="compareGenericTexts()" class="button button-secondary">Compare Texts</button>
+        <button onclick="copyComparisonResults()" class="button">Copy Results</button>
+        
+        <h2>Comparison Results</h2>
+        <div id="comparisonResults" class="comparison-results"></div>
     </div>
     
     <div class="section">
@@ -1175,6 +1314,192 @@
             outputTextArea.select();
             document.execCommand('copy');
             showNotification("Output copied to clipboard!", 'success');
+        }
+        
+        // Generic Text Comparison Functions
+        function compareGenericTexts() {
+            const text1 = document.getElementById('genericText1').value;
+            const text2 = document.getElementById('genericText2').value;
+            const compareMode = document.getElementById('compareMode').value;
+            const ignoreCase = document.getElementById('ignoreCase').checked;
+            const ignoreWhitespace = document.getElementById('ignoreWhitespace').checked;
+            
+            if (!text1 && !text2) {
+                showNotification('Please enter texts to compare', 'warning');
+                return;
+            }
+            
+            let result;
+            
+            switch (compareMode) {
+                case 'character':
+                    result = compareCharByChar(text1, text2, ignoreCase, ignoreWhitespace);
+                    break;
+                case 'word':
+                    result = compareWordByWord(text1, text2, ignoreCase, ignoreWhitespace);
+                    break;
+                case 'line':
+                default:
+                    result = compareLineByLine(text1, text2, ignoreCase, ignoreWhitespace);
+                    break;
+            }
+            
+            document.getElementById('comparisonResults').innerHTML = result;
+            showNotification('Comparison completed', 'success');
+        }
+        
+        function normalizeText(text, ignoreCase, ignoreWhitespace) {
+            let result = text;
+            
+            if (ignoreCase) {
+                result = result.toLowerCase();
+            }
+            
+            if (ignoreWhitespace) {
+                result = result.replace(/\s+/g, ' ').trim();
+            }
+            
+            return result;
+        }
+        
+        function compareLineByLine(text1, text2, ignoreCase, ignoreWhitespace) {
+            const lines1 = text1.split('\n');
+            const lines2 = text2.split('\n');
+            let html = '';
+            
+            const maxLen = Math.max(lines1.length, lines2.length);
+            
+            for (let i = 0; i < maxLen; i++) {
+                const line1 = i < lines1.length ? lines1[i] : '';
+                const line2 = i < lines2.length ? lines2[i] : '';
+                
+                const normalizedLine1 = normalizeText(line1, ignoreCase, ignoreWhitespace);
+                const normalizedLine2 = normalizeText(line2, ignoreCase, ignoreWhitespace);
+                
+                if (normalizedLine1 === normalizedLine2) {
+                    html += `<div class="diff-line diff-unchanged">
+                        <span class="diff-line-number">${i + 1}</span>
+                        <span>${escapeHtml(line1)}</span>
+                    </div>`;
+                } else {
+                    if (line1 !== '') {
+                        html += `<div class="diff-line diff-removed">
+                            <span class="diff-line-number">${i + 1}</span>
+                            <span>- ${escapeHtml(line1)}</span>
+                        </div>`;
+                    }
+                    
+                    if (line2 !== '') {
+                        html += `<div class="diff-line diff-added">
+                            <span class="diff-line-number">${i + 1}</span>
+                            <span>+ ${escapeHtml(line2)}</span>
+                        </div>`;
+                    }
+                }
+            }
+            
+            return html || '<div class="diff-unchanged">No differences found</div>';
+        }
+        
+        function compareWordByWord(text1, text2, ignoreCase, ignoreWhitespace) {
+            const words1 = normalizeText(text1, ignoreCase, true).split(/\s+/);
+            const words2 = normalizeText(text2, ignoreCase, true).split(/\s+/);
+            
+            let html = '';
+            html += '<div class="diff-line"><strong>Text 1 words:</strong></div>';
+            
+            const uniqueWords1 = new Set(words1);
+            const uniqueWords2 = new Set(words2);
+            
+            const onlyInText1 = [...uniqueWords1].filter(word => !uniqueWords2.has(word));
+            const onlyInText2 = [...uniqueWords2].filter(word => !uniqueWords1.has(word));
+            const common = [...uniqueWords1].filter(word => uniqueWords2.has(word));
+            
+            if (onlyInText1.length > 0) {
+                html += '<div class="diff-line diff-removed"><span>Words only in Text 1:</span></div>';
+                html += `<div class="diff-line diff-removed"><span>${escapeHtml(onlyInText1.join(', '))}</span></div>`;
+            }
+            
+            if (onlyInText2.length > 0) {
+                html += '<div class="diff-line diff-added"><span>Words only in Text 2:</span></div>';
+                html += `<div class="diff-line diff-added"><span>${escapeHtml(onlyInText2.join(', '))}</span></div>`;
+            }
+            
+            if (common.length > 0) {
+                html += '<div class="diff-line diff-unchanged"><span>Common words:</span></div>';
+                html += `<div class="diff-line diff-unchanged"><span>${escapeHtml(common.join(', '))}</span></div>`;
+            }
+            
+            return html || '<div class="diff-unchanged">No differences found</div>';
+        }
+        
+        function compareCharByChar(text1, text2, ignoreCase, ignoreWhitespace) {
+            const normalized1 = normalizeText(text1, ignoreCase, ignoreWhitespace);
+            const normalized2 = normalizeText(text2, ignoreCase, ignoreWhitespace);
+            
+            let html = '';
+            let diffCount = 0;
+            
+            const maxLen = Math.max(normalized1.length, normalized2.length);
+            
+            for (let i = 0; i < maxLen; i++) {
+                const char1 = i < normalized1.length ? normalized1[i] : '';
+                const char2 = i < normalized2.length ? normalized2[i] : '';
+                
+                if (char1 === char2) {
+                    html += `<span class="diff-unchanged">${escapeHtml(char1)}</span>`;
+                } else {
+                    html += `<span class="diff-removed">${escapeHtml(char1 || '')}</span>`;
+                    html += `<span class="diff-added">${escapeHtml(char2 || '')}</span>`;
+                    diffCount++;
+                }
+            }
+            
+            return `
+                <div>Character differences: ${diffCount}</div>
+                <div class="diff-line">${html}</div>
+            `;
+        }
+        
+        function copyComparisonResults() {
+            const resultsHtml = document.getElementById('comparisonResults');
+            
+            if (!resultsHtml.textContent.trim()) {
+                showNotification('No comparison results to copy', 'warning');
+                return;
+            }
+            
+            // Create a text representation of the comparison
+            const compareMode = document.getElementById('compareMode').value;
+            const text1 = document.getElementById('genericText1').value;
+            const text2 = document.getElementById('genericText2').value;
+            
+            let textToCopy = `COMPARISON RESULTS (${compareMode} comparison):\n\n`;
+            textToCopy += `TEXT 1:\n${text1}\n\n`;
+            textToCopy += `TEXT 2:\n${text2}\n\n`;
+            
+            // Extract text content from the HTML, preserving some structure
+            const resultText = resultsHtml.textContent.replace(/\s+/g, ' ').trim();
+            textToCopy += `DIFFERENCES:\n${resultText}`;
+            
+            // Copy to clipboard using the clipboard API
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    showNotification('Comparison results copied to clipboard!', 'success');
+                })
+                .catch(err => {
+                    showNotification('Failed to copy comparison results', 'error');
+                    console.error('Failed to copy: ', err);
+                });
+        }
+        
+        function escapeHtml(unsafe) {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
         }
     </script>
 </body>
